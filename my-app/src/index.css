@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:-webkit-linear-gradient(135deg, rgb(231, 222, 222), rgb(228, 216, 216));
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+*{
+  padding: 0;
+  margin: 0;
+}
+
+.loginp{
+  display: block;
+  margin: auto;
+  margin-bottom: 20px;
+  width: 25%;
+  
+}
+#submit{
+  display: block;
+  margin: auto;
+}
+form{
+  margin-top: 35vh;
+  position: relative;
+  bottom:20vh;
+}
+input{
+  padding: 10px;
+  background-color: cyan;
+}
+
+.buttons{
+  text-align: center;
+  background-color: rgb(212, 212, 209);
+  padding: 1px;
+
+}
+.buttons h1{
+  color: rgb(148, 158, 158);
+  margin-top: 15px;
+}
+.buttons h2{
+  color: rgb(148, 158, 158);
+  margin-top: 5px;
+}
+.buttons button{
+  margin-right: 10px;
+  padding: 7px;
+  background-color:rgb(251, 233, 233);
+  border: 2px solid rgb(65, 65, 211);
+  border-radius: 5px;
+}
+.buttonsTop{
+  background-color: rgb(216, 198, 198);
+}
+.buttons button:active{
+  background-color: chartreuse;
+}
+#MainScreenHeadh1{
+  font-family: 'Playfair Display', serif;
+}
+.MainScreenItems button{
+  display: block;
+}
