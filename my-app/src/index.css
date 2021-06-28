@@ -68,6 +68,60 @@ input{
 #MainScreenHeadh1{
   font-family: 'Playfair Display', serif;
 }
+
+
+nav li{
+  display: inline;
+  margin-right: 2%;
+  text-decoration: none;
+  background-color: rgb(233, 200, 17);
+}
+nav{
+  background-color: rgb(200, 214, 214);
+  padding: 10px;
+}
+.centerNav{
+  width: 70vw;
+  margin: auto;
+  text-align: center;
+}
+.centerNavTer{
+  width: 60vw;
+  margin: auto;
+  text-align: center;
+  background-color: black;
+  color: rgb(21, 180, 21);
+  height: 80vh;
+}
+
 .MainScreenItems button{
+  padding:4px;
+  width: fit-content;
   display: block;
+}
+.MainScreenItems{
+  position: absolute;
+  top:50px;
+}
+.commandSection{
+  width: 97%;
+  margin-top: 2px;
+  height: 4vh;
+  background-color: rgb(1, 1, 10);
+  color:rgb(13, 233, 13);
+}
+.outputSection{
+  margin-top: 5px;
+  text-align: left;
+  padding-left: 5px;
+}
+.dashboard{
+  background-color: orange;
+
+}
+.discussions{
+  background-color: orange;
+}
+.commands{
+  background-color: orange;
 }

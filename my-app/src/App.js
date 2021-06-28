@@ -1,6 +1,4 @@
 import Login from "./Components/Login";
-import {useState} from "react";
-import MainScreen from "./Components/MainScreen";
 
 
 function App(){

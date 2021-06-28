@@ -1,8 +1,7 @@
 import {useState} from 'react';
-import MainScreen from './MainScreen';
 import axios from 'axios';
+import MainScr from './MainScreen/MainScr';
 const isLoggedIn = localStorage.getItem("isLoggedIn");
-
 function Login(){
     const [clickLogin,setClickLogin] = useState(false);
     const [clickRegister,setClickRegister] = useState(false);
@@ -21,7 +20,7 @@ function Login(){
         }
         axios({
             method: 'post',
-            url: 'http://127.0.0.1:4000/register',
+            url: 'http://127.0.0.1:4000/mainScr/register',
             data: body
         }).then(function (response) {
             console.log(response);
@@ -33,6 +32,7 @@ function Login(){
         });
         localStorage.setItem("isLoggedIn","true");
         localStorage.setItem("loggedInUsername",event.target[0].value);
+        localStorage.setItem("position",posData);
         window.location.reload();
     }
     else{
@@ -48,17 +48,21 @@ function Login(){
         }
         axios({
             method:'post',
-            url:'http://127.0.0.1:4000/signin',
+            url:'http://127.0.0.1:4000/mainScr/signin',
             data:body
         }).then((response)=>{
-            let resp = String(response.data);
-            if(resp==="Yes"){
+            let resp = response.data;
+            console.log(resp);
+            if(resp.authPosition==="Invalid email"){
+                alert("Invalid email provided");
+            }
+            else if(resp.auth==="Yes"){
                 submittedSignin=true;
                 localStorage.setItem("isLoggedIn","true");
                 localStorage.setItem("loggedInUsername",event.target[0].value);
                 window.location.reload();
             }
-            else if(resp==="No"){
+            else if(resp.auth==="No"){
                 alert("Invalid credentials provided");
             }
         }).catch((error)=>{
@@ -117,7 +121,7 @@ function Login(){
         </div>
     }
     return <div>
-        {isLoggedIn==="true"||submittedRegister===true||submittedSignin===true?<MainScreen></MainScreen>:<Buttons></Buttons>}
+        {isLoggedIn==="true"||submittedRegister===true||submittedSignin===true?<MainScr></MainScr>:<Buttons></Buttons>}
         {clickLogin===true&&submittedRegister===false?<Signin></Signin>:null}
         {clickRegister===true&&submittedRegister===false?<Register></Register>:null}
     </div>
