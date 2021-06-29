@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-const loggedInUsername = localStorage.getItem("loggedInUsername");
+const loggedInUsername = sessionStorage.getItem("loggedInUsername");
 
 
 function MainScreenS(){

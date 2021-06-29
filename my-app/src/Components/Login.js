@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import axios from 'axios';
 import MainScr from './MainScreen/MainScr';
-const isLoggedIn = localStorage.getItem("isLoggedIn");
+const isLoggedIn = sessionStorage.getItem("isLoggedIn");
 function Login(){
     const [clickLogin,setClickLogin] = useState(false);
     const [clickRegister,setClickRegister] = useState(false);
@@ -10,8 +10,12 @@ function Login(){
     function handleSubmitRegister(event){
         let posData = String(event.target[3].value);
         posData=posData.toLowerCase();
+        if(posData==="teacher"){
+            sessionStorage.setItem("teacherLog","Yes");
+        }
         event.preventDefault();
         if(posData==="student"||posData==="teacher"){
+            sessionStorage.setItem("logEmail",event.target[2].value)
         let body = {
             name:event.target[0].value,
             password:event.target[1].value,
@@ -30,9 +34,9 @@ function Login(){
         .catch(function (error) {
             console.log(error);
         });
-        localStorage.setItem("isLoggedIn","true");
-        localStorage.setItem("loggedInUsername",event.target[0].value);
-        localStorage.setItem("position",posData);
+        sessionStorage.setItem("isLoggedIn","true");
+        sessionStorage.setItem("loggedInUsername",event.target[0].value);
+        sessionStorage.setItem("position",posData);
         window.location.reload();
     }
     else{
@@ -41,6 +45,7 @@ function Login(){
     }
     function handleSubmitSignin(event){
         event.preventDefault();
+        sessionStorage.setItem("logEmail",event.target[2].value);
         let body = {
             name:event.target[0].value,
             password:event.target[1].value,
@@ -58,8 +63,8 @@ function Login(){
             }
             else if(resp.auth==="Yes"){
                 submittedSignin=true;
-                localStorage.setItem("isLoggedIn","true");
-                localStorage.setItem("loggedInUsername",event.target[0].value);
+                sessionStorage.setItem("isLoggedIn","true");
+                sessionStorage.setItem("loggedInUsername",event.target[0].value);
                 window.location.reload();
             }
             else if(resp.auth==="No"){
@@ -121,6 +126,7 @@ function Login(){
         </div>
     }
     return <div>
+       
         {isLoggedIn==="true"||submittedRegister===true||submittedSignin===true?<MainScr></MainScr>:<Buttons></Buttons>}
         {clickLogin===true&&submittedRegister===false?<Signin></Signin>:null}
         {clickRegister===true&&submittedRegister===false?<Register></Register>:null}

@@ -1,8 +1,12 @@
 function Logout(){
+    let teacherLog = sessionStorage.getItem("teacherLog");
     function logOt(){
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("position");
-    localStorage.removeItem("loggednInUsername");
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("position");
+    sessionStorage.removeItem("loggedInUsername");
+    if(teacherLog){
+        sessionStorage.removeItem("teacherLog");
+    }
     window.location.reload();
 }
     return <button onClick={logOt}>Logout</button>

@@ -1,9 +1,9 @@
 
 function ErrorHandlerButton(){
     function ErrorHandler(){
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("position");
-        localStorage.removeItem("loggedInUsername");
+        sessionStorage.removeItem("isLoggedIn");
+        sessionStorage.removeItem("position");
+        sessionStorage.removeItem("loggedInUsername");
         window.location.reload();
     }
     return <div>

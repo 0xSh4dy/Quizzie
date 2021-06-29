@@ -4,7 +4,7 @@ import Discussions from './Discussion';
 import Commands from './Commands';
 import {BrowserRouter as Router, Route, Switch,Link} from 'react-router-dom';
 import Logout from './Logout';
-const loggedInUsername = localStorage.getItem("loggedInUsername");
+const loggedInUsername = sessionStorage.getItem("loggedInUsername");
 function UserNameNav(){
     return <h2 style={{display:'inline', position:'absolute', right:10}}> Welcome, {loggedInUsername} !</h2>
 }
