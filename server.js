@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs');
 const saltRounds=10;
 var userPosition = "";
 var uName="";
-var teacherId = "";
 var teacherEmail="";
 var studEmail = "";
 var studName="";
@@ -25,6 +24,10 @@ const TeacherCoursesSchema = mongoose.Schema({
     courses:[{crs:String}],
     studentData:[{studentName:String,studentEmail:String,studentCourse:String}]
 })
+const EventsSchema = mongoose.Schema({
+    teacherEvents:[{tevs:String}],
+    studentJoinEvents:[{}]
+})
 const StudentCoursesSchema = mongoose.Schema({
     name:String,
     course:[{crstud:String}]
@@ -32,6 +35,7 @@ const StudentCoursesSchema = mongoose.Schema({
 const QuizUsers = mongoose.model("quizuser",QuizUserSchema);
 const QuizTeacherCourses =mongoose.model("quizTeacherCourse",TeacherCoursesSchema);
 const StudentJoinedCourses = mongoose.model("studentJoincourse",StudentCoursesSchema);
+const AllEvents = mongoose.model("allEvent",EventsSchema);
 app.use(express.urlencoded({extended:true}));
 app.use(cors());
 app.get("/",(req,res)=>{
@@ -191,7 +195,21 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                         }
                                         else{
                                             done=true;
-                                            res.send("Yes");
+    
+                                            QuizTeacherCourses.updateOne({teacherEmail:reqEmail},{
+                                                $push:{studentData:{studentName:studName,studentEmail:studEmail,studentCourse:reqCourse}}          
+                                               },(err1,dat1)=>{
+                                                   if(err1){
+                                                       console.log(err1);
+                                                   }
+                                                   else{
+                                                    res.send("Yes");
+                                                       
+                                                   
+                                                   }
+                                                   
+                                               })
+
                                         }
                                     });
                                     
@@ -300,6 +318,31 @@ app.get("/data",(req,res)=>{
         }
         else{
             res.send(data);
+        }
+    })
+})
+app.get("/data/studCourses",(req,res)=>{
+    StudentJoinedCourses.find({name:studName},(err,data)=>{
+        if(err){
+            console.log(err);
+        }
+        res.send(data);
+        console.log(data[0].course);
+    })
+})
+app.get("/mainScr/teacher/courses",(req,res)=>{
+    let reqC = [];
+    QuizTeacherCourses.find({teacherEmail:teacherEmail},(err,data)=>{
+        
+        if(err){
+            console.log(err);
+        }
+        else{
+            let length2 = data[0].courses.length;
+            for(let i=0;i<length2;i++){
+                reqC.push(data[0].courses[i].crs);
+            }  
+            res.send(reqC);
         }
     })
 })
