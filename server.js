@@ -305,7 +305,7 @@ app.get("/data/courses",(req,res)=>{
 app.get("/mainScr/authRenderer",(req,res)=>{
     QuizUsers.findOne({name:uName},(err,data)=>{
         if(err){
-            consort.log(err);
+            console.log(err);
         }
        
     })

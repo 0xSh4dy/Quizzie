@@ -8,6 +8,7 @@ const loggedInUsername = sessionStorage.getItem("loggedInUsername");
 function UserNameNav(){
     return <h2 style={{display:'inline', position:'absolute', right:10}}> Welcome, {loggedInUsername} !</h2>
 }
+
 function Navbar(){
     return (
         <Router>
@@ -36,6 +37,7 @@ function Navbar(){
           </nav>
 
           <Switch>
+            
           <Route path="/dashboard">
                 <div className="centerNav">
                     <Dashboard/>

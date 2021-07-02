@@ -136,3 +136,58 @@ strong{
 .commandsList li{
   list-style: none;
 }
+.dash{
+  background-color: rgb(255, 95, 9);
+}
+.dashClass{
+  text-align: left;
+  list-style:none;
+}
+.dashClass li{
+  padding: 10px;
+  color:rgb(4, 37, 61) ;
+}
+.dashClass h1{
+  color: blueviolet;
+}
+.quizDash{
+  position: absolute;
+  top:10vh;
+  list-style: none;
+  background-color: blue;
+  padding: 5px;
+}
+.quizDash button{
+  background-color: greenyellow;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid white;
+}
+.quizDash h2{
+  color: yellow;
+  margin-bottom: 5px;
+}
+.quizDash li{
+  padding: 2px;
+}
+.quizConfig{
+  background-color: lightblue;
+  position: absolute;
+  top:6vh;
+}
+.quizConfig label{
+  font-size: 12px;
+}
+.quizConfig div{
+  margin-top: 5px;
+  background-color: rgb(11, 223, 219);
+}
+#submitQuizConf{
+  margin-top: 10px;
+  background-color: greenyellow;
+  border: 2px solid white;
+  border-radius: 5px;
+}
+#inputNumConf{
+  width: 55%;
+}

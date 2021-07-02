@@ -2,7 +2,12 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 let a =1;
 function MyCourses(props){
-    return <li className="liLeft" key={a++}>{props}</li>
+    return <li key={a++}>{props}</li>
+}
+function EventDashboard(){
+    return (
+        <h1>Event Dashboard</h1>
+    )
 }
 function Dashboard(){
     const [gotCourseData,setCourseData]=useState(false);
@@ -20,12 +25,16 @@ function Dashboard(){
     if(gotCourseData===true){
         const dat1 = [...dat];
         console.log(dat1);
-        return <div>
-            <h1>My Courses
-                {console.log(dat1)}
+        return <div className="dashClass">
+            <h1 >My Courses</h1>
+                <div className="dash">
+                <div className="dash1">
                 {dat1.map(MyCourses)}
-            </h1>
-            
+                </div>
+                <div className="dash2">
+                <EventDashboard></EventDashboard>
+                </div>
+                </div>
         </div>
     }else{
         return <h1>Loading...</h1>
