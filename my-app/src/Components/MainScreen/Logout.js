@@ -4,6 +4,7 @@ function Logout(){
     sessionStorage.removeItem("isLoggedIn");
     sessionStorage.removeItem("position");
     sessionStorage.removeItem("loggedInUsername");
+    sessionStorage.removeItem("logEmail");
     if(teacherLog){
         sessionStorage.removeItem("teacherLog");
     }

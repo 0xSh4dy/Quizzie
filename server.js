@@ -26,7 +26,7 @@ const TeacherCoursesSchema = mongoose.Schema({
 })
 const EventsSchema = mongoose.Schema({
     teacherEvents:[{tevs:String}],
-    studentJoinEvents:[{}]
+    studentEvents:[{sevs:String}]
 })
 const StudentCoursesSchema = mongoose.Schema({
     name:String,
@@ -329,6 +329,9 @@ app.get("/data/studCourses",(req,res)=>{
         res.send(data);
         console.log(data[0].course);
     })
+})
+app.post("/mainScr/teacher/setQuiz",(req,res)=>{
+    console.log(req.body);
 })
 app.get("/mainScr/teacher/courses",(req,res)=>{
     let reqC = [];

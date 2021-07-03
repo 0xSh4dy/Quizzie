@@ -163,6 +163,9 @@ strong{
   border-radius: 5px;
   border: 1px solid white;
 }
+.quizDash button:hover{
+  cursor: pointer;
+}
 .quizDash h2{
   color: yellow;
   margin-bottom: 5px;

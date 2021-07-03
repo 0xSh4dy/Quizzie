@@ -1,15 +1,22 @@
 import { useEffect,useState } from "react";
-import { useHistory } from "react-router";
 import axios from 'axios';
 let b=1;
 
 
 function Quiz(){
     function SendConfigData(event){
-        alert(event.target);
-        const history = useHistory();
-        console.log(event.target[0].value);
-        history.push("/terminal");
+        //2021-07-05T07:54
+        let quizDateTime = String(event.target[0].value);
+        let quizDate = quizDateTime.slice(0,10);
+        let quizTime = quizDateTime.slice(11,16);
+        const body = {
+            quizDate:quizDate,
+            quizTime:quizTime
+        } 
+        axios({
+            method:"POST",
+            url:'http://127.0.0.1:4000/mainScr/teacher/setQuiz'
+        })
     }
 
     
@@ -54,7 +61,7 @@ function Quiz(){
             <div>
             <label>Duration(minutes):</label> <input id="inputNumConf" type="number" min="0" max="300" placeholder="Enter duration(in minutes)" required></input>
 </div>
-     <input id="submitQuizConf" type="submit" value="Done!"></input>
+        <input id="submitQuizConf" type="submit" value="Done!"></input>
         </form>
     </div>
     }
