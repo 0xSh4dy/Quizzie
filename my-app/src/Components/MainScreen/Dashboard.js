@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
 import axios from "axios";
+import StudentDashBoard from './StudentDashboard';
 let a =1;
 function MyCourses(props){
     return <li key={a++}>{props}</li>
@@ -9,9 +10,21 @@ function EventDashboard(){
         <h1>Event Dashboard</h1>
     )
 }
+
 function Dashboard(){
     const [gotCourseData,setCourseData]=useState(false);
     const [dat,setDat] = useState([]);
+    const [position,setPosition] = useState("");
+    useEffect(()=>{
+        axios({
+            method:"GET",
+            url:"http://127.0.0.1:4000/mainScr/teacher/studentboard"
+        }).then((resp)=>{
+            setPosition(resp.data);
+        })
+        .catch(err=>console.log(err));
+    },[])
+    
     useEffect(()=>{
         axios({
             method:"GET",
@@ -21,8 +34,10 @@ function Dashboard(){
             
             setCourseData(true);
         }).catch(err=>console.log(err));
+
+       
     },[]);
-    if(gotCourseData===true){
+    if(gotCourseData===true&&position==="teacher"){
         const dat1 = [...dat];
         console.log(dat1);
         return <div className="dashClass">
@@ -36,7 +51,11 @@ function Dashboard(){
                 </div>
                 </div>
         </div>
-    }else{
+    }
+    else if(position==="student"){
+        return <StudentDashBoard></StudentDashBoard>
+    }
+    else{
         return <h1>Loading...</h1>
     }
     

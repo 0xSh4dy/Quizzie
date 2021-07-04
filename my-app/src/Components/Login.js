@@ -23,21 +23,22 @@ function Login(){
             position:posData
         }
         axios({
-            method: 'post',
+            method: 'POST',
             url: 'http://127.0.0.1:4000/mainScr/register',
             data: body
-        }).then(function (response) {
-            console.log(response);
+        }).then((respo)=> {
+            console.log(respo);
+            console.log("Astha");
             setSubmittedRegister(true);
+            sessionStorage.setItem("isLoggedIn","true");
             
         })
         .catch(function (error) {
             console.log(error);
         });
-        sessionStorage.setItem("isLoggedIn","true");
         sessionStorage.setItem("loggedInUsername",event.target[0].value);
         sessionStorage.setItem("position",posData);
-        window.location.reload();
+        
     }
     else{
         alert("Position can either be student or teacher");

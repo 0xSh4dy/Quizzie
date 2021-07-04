@@ -25,12 +25,12 @@ const TeacherCoursesSchema = mongoose.Schema({
     studentData:[{studentName:String,studentEmail:String,studentCourse:String}]
 })
 const EventsSchema = mongoose.Schema({
-    teacherEvents:[{tevs:String}],
-    studentEvents:[{sevs:String}]
+    tEmail:String,
+    teacherEvents:[{date:String,time:String,course:String}]
 })
 const StudentCoursesSchema = mongoose.Schema({
     name:String,
-    course:[{crstud:String}]
+    course:[{crstud:String,crteach:String}]
 })
 const QuizUsers = mongoose.model("quizuser",QuizUserSchema);
 const QuizTeacherCourses =mongoose.model("quizTeacherCourse",TeacherCoursesSchema);
@@ -46,6 +46,7 @@ app.get("/login",function(req,res){
 })
 
 app.post("/mainScr/register",(req,res)=>{
+    console.log("boom");
     uName = req.body.name;
     userPosition=req.body.position;
     if(userPosition==="teacher"){
@@ -54,6 +55,10 @@ app.post("/mainScr/register",(req,res)=>{
     else if(userPosition==="student"){
         studEmail=req.body.email;
         studName=req.body.name;
+        const studDat1 = new StudentJoinedCourses({name:studName,
+            course:[{crstud:"demo",crteach:"demo@demo.demo"}]
+        })
+        studDat1.save();
     }
     bcrypt.hash(req.body.password,saltRounds,(err,hash)=>{
         const newQuizUser = new QuizUsers({
@@ -76,9 +81,22 @@ app.post("/mainScr/register",(req,res)=>{
             if(err){
                 console.log(err);
             }
+            else{
+                console.log(data);
+            }
+        });
+        const newEvent = new AllEvents({
+            tEmail:teacherEmail,
+            teacherEvents:[{date:"demo",time:"demo",course:"demo"}]
+        })
+        newEvent.save((err,res)=>{
+            if(err){
+                console.log(err);
+            }
+            else{console.log("Saved")}
         });
     }
-    
+   res.send("Yes"); 
 })
 app.post("/mainScr/signin",(req,res)=>{
     uName = req.body.name;
@@ -187,7 +205,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                 if(alreadyRegistered===false){
                                     
                                     const studDat = new StudentJoinedCourses({name:studName,
-                                        course:[{crstud:reqCourse}]
+                                        course:[{crstud:reqCourse,crteach:reqEmail}]
                                     })
                                     studDat.save((err9,dat9)=>{
                                         if(err9){
@@ -231,7 +249,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                             else{
                                                 StudentJoinedCourses.updateOne({name:studName},{
                                                     $push:{
-                                                        course:{crstud:reqCourse}
+                                                        course:{crstud:reqCourse,crteach:reqEmail}
                                                     }
                                                 },(err8,dat8)=>{
                                                     if(err8){
@@ -332,6 +350,22 @@ app.get("/data/studCourses",(req,res)=>{
 })
 app.post("/mainScr/teacher/setQuiz",(req,res)=>{
     console.log(req.body);
+    AllEvents.updateOne({tEmail:teacherEmail},{
+        $push:{
+            teacherEvents:{
+                date:req.body.quizDate,
+                time:req.body.quizTime,
+                course:req.body.course
+            }
+        }
+    },(err,result)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log(result);
+        }
+    })
 })
 app.get("/mainScr/teacher/courses",(req,res)=>{
     let reqC = [];
@@ -348,5 +382,8 @@ app.get("/mainScr/teacher/courses",(req,res)=>{
             res.send(reqC);
         }
     })
+})
+app.get("/mainScr/teacher/studentboard",(req,res)=>{
+    res.send(userPosition);
 })
 app.listen(4000);

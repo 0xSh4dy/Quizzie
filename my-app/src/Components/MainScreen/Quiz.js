@@ -1,9 +1,13 @@
 import { useEffect,useState } from "react";
 import axios from 'axios';
 let b=1;
-
+var btnTextDat = "";
 
 function Quiz(){
+     
+    const [buttonData,setButtonData] = useState([]);
+    const [requestNow,requestComplete] = useState(false);
+    const [configureQuiz,setConfigureQuiz] = useState(false);
     function SendConfigData(event){
         //2021-07-05T07:54
         let quizDateTime = String(event.target[0].value);
@@ -11,23 +15,27 @@ function Quiz(){
         let quizTime = quizDateTime.slice(11,16);
         const body = {
             quizDate:quizDate,
-            quizTime:quizTime
+            quizTime:quizTime,
+            course:btnTextDat
         } 
         axios({
             method:"POST",
-            url:'http://127.0.0.1:4000/mainScr/teacher/setQuiz'
-        })
+            url:'http://127.0.0.1:4000/mainScr/teacher/setQuiz',
+            data:body
+        }).then((resp)=>{
+            
+        }).catch(err=>console.log(err));
     }
 
-    
-    const [buttonData,setButtonData] = useState([]);
-    const [requestNow,requestComplete] = useState(false);
-    const [configureQuiz,setConfigureQuiz] = useState(false);
-    function displayBtns(){
+   
+    function DisplayBtns(event){
         setConfigureQuiz(true);
+        btnTextDat = event.target.value;
+        console.log(btnTextDat);
     }
     function ButtonCourses(prop){
-        return <li key={b++}><button  style={{color:"red"}} onClick={displayBtns}>{prop}</button>  </li>
+        
+        return <li key={b++}><button  style={{color:"red"}} onClick={DisplayBtns} value={prop}>{prop}</button>  </li>
         }
 
     useEffect(()=>{
