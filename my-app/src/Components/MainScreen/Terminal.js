@@ -88,9 +88,10 @@ function Terminal(){
                         method:'GET',
                         url:'http://127.0.0.1:4000/data/studCourses'
                 }).then((respons)=>{
+                    console.log(respons.data);
                     let studCourse = [];
-                    for(let k=1;k<respons.data[0].course.length;k++){
-                        studCourse.push(respons.data[0].course[k].crstud+'</br>');
+                    for(let k=1;k<respons.data.length;k++){
+                        studCourse.push(respons.data[k].course[0].crstud+'</br>');
                     }
                     outputSec.innerHTML=`Courses in which you have participated are: ${studCourse}`
                 }).catch(err=>console.log(err));

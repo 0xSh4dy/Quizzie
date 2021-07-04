@@ -30,9 +30,19 @@ function Dashboard(){
             method:"GET",
             url:"http://127.0.0.1:4000/mainScr/teacher/courses"
         }).then((results)=>{
+            if(results.data!="No"){
             setDat(results.data);
             
             setCourseData(true);
+        }
+        else if(results.data==="No"){
+            axios({
+                method:"GET",
+                url:"http://127.0.0.1:4000/mainScr/teacher/quizDat"
+            }).then((respon)=>{
+                console.log("complete");
+            }).catch(error=>console.log(error));
+        }
         }).catch(err=>console.log(err));
 
        

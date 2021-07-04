@@ -29,7 +29,7 @@ const EventsSchema = mongoose.Schema({
     teacherEvents:[{date:String,time:String,course:String}]
 })
 const StudentCoursesSchema = mongoose.Schema({
-    name:String,
+    email:String,
     course:[{crstud:String,crteach:String}]
 })
 const QuizUsers = mongoose.model("quizuser",QuizUserSchema);
@@ -46,7 +46,6 @@ app.get("/login",function(req,res){
 })
 
 app.post("/mainScr/register",(req,res)=>{
-    console.log("boom");
     uName = req.body.name;
     userPosition=req.body.position;
     if(userPosition==="teacher"){
@@ -55,7 +54,7 @@ app.post("/mainScr/register",(req,res)=>{
     else if(userPosition==="student"){
         studEmail=req.body.email;
         studName=req.body.name;
-        const studDat1 = new StudentJoinedCourses({name:studName,
+        const studDat1 = new StudentJoinedCourses({email:studEmail,
             course:[{crstud:"demo",crteach:"demo@demo.demo"}]
         })
         studDat1.save();
@@ -70,7 +69,6 @@ app.post("/mainScr/register",(req,res)=>{
         newQuizUser.save();
     })
     if(userPosition==="teacher"){
-        console.log("Yes");
         const newTeacherCourse = new QuizTeacherCourses({
             teacherEmail:req.body.email,
             teacherName:req.body.name,
@@ -81,9 +79,7 @@ app.post("/mainScr/register",(req,res)=>{
             if(err){
                 console.log(err);
             }
-            else{
-                console.log(data);
-            }
+            
         });
         const newEvent = new AllEvents({
             tEmail:teacherEmail,
@@ -93,7 +89,6 @@ app.post("/mainScr/register",(req,res)=>{
             if(err){
                 console.log(err);
             }
-            else{console.log("Saved")}
         });
     }
    res.send("Yes"); 
@@ -195,7 +190,6 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                 console.log(err7);
                             }
                             else{
-                                console.log(dat7);
                                 if(dat7.length===0){
                                     alreadyRegistered=false;
                                 }
@@ -204,7 +198,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                 }
                                 if(alreadyRegistered===false){
                                     
-                                    const studDat = new StudentJoinedCourses({name:studName,
+                                    const studDat = new StudentJoinedCourses({email:studEmail,
                                         course:[{crstud:reqCourse,crteach:reqEmail}]
                                     })
                                     studDat.save((err9,dat9)=>{
@@ -233,8 +227,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                     
                                 }
                                 else if(alreadyRegistered===true){
-                                    console.log("yeahah");
-                                    StudentJoinedCourses.find({name:studName}
+                                    StudentJoinedCourses.find({email:studEmail}
                                         ,(err10,dat10)=>{
                                             let dat10array=[];
                                             if(dat10.length>0){
@@ -247,7 +240,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                                 res.send("Naah");
                                             }
                                             else{
-                                                StudentJoinedCourses.updateOne({name:studName},{
+                                                StudentJoinedCourses.updateOne({email:studEmail},{
                                                     $push:{
                                                         course:{crstud:reqCourse,crteach:reqEmail}
                                                     }
@@ -340,16 +333,14 @@ app.get("/data",(req,res)=>{
     })
 })
 app.get("/data/studCourses",(req,res)=>{
-    StudentJoinedCourses.find({name:studName},(err,data)=>{
+    StudentJoinedCourses.find({email:studEmail},(err,data)=>{
         if(err){
             console.log(err);
         }
         res.send(data);
-        console.log(data[0].course);
     })
 })
 app.post("/mainScr/teacher/setQuiz",(req,res)=>{
-    console.log(req.body);
     AllEvents.updateOne({tEmail:teacherEmail},{
         $push:{
             teacherEvents:{
@@ -362,9 +353,7 @@ app.post("/mainScr/teacher/setQuiz",(req,res)=>{
         if(err){
             console.log(err);
         }
-        else{
-            console.log(result);
-        }
+        
     })
 })
 app.get("/mainScr/teacher/courses",(req,res)=>{
@@ -374,14 +363,72 @@ app.get("/mainScr/teacher/courses",(req,res)=>{
         if(err){
             console.log(err);
         }
+        
         else{
-            let length2 = data[0].courses.length;
+            if(data.length===0){
+                res.send("No");
+            }
+            else{
+                
+                let length2 = data[0].courses.length;
             for(let i=0;i<length2;i++){
                 reqC.push(data[0].courses[i].crs);
             }  
             res.send(reqC);
+            }
+            
         }
     })
+})
+app.get("/mainScr/teacher/quizDat",(req,res)=>{
+    StudentJoinedCourses.find({email:studEmail},(err,data)=>{
+        if(err){
+            console.log(err);
+        }
+        else{
+            let datLen = data.length;
+            let studentCourses = [];
+            let studentCourseTeacher = [];
+            for(let i=1;i<datLen;i++){
+                studentCourses.push(data[i].course[0].crstud);
+                studentCourseTeacher.push(data[i].course[0].crteach);
+            }
+            let arrLen = studentCourses.length;
+            let availableQuiz = [];
+            async function getData(){
+                for(let i=0;i<arrLen;i++){
+                    let dat1 = await AllEvents.find({tEmail:studentCourseTeacher[i]},(err1,dat1)=>{
+                        if(err1){
+                            console.log(err1);
+                        }
+                        else{
+                            if(dat1.length===0){
+                                console.log("Error");
+                            }
+                            else{
+                                
+                                let eventLength = dat1[0].teacherEvents.length;
+                                for(let j=0;j<eventLength;j++){
+                                    if(dat1[0].teacherEvents[j].date!='demo'){
+                                        availableQuiz.push(JSON.stringify({date:dat1[0].teacherEvents[j].date,
+                                        time:dat1[0].teacherEvents[j].time,
+                                         course:dat1[0].teacherEvents[j].course
+                                        }))
+                                    }
+                                }
+                            }
+                        }
+                    })
+                }
+               
+                uniq = [...new Set(availableQuiz)];
+                console.log(uniq);
+                res.send(uniq);
+            }
+            getData();
+        }
+    })
+    
 })
 app.get("/mainScr/teacher/studentboard",(req,res)=>{
     res.send(userPosition);
