@@ -423,7 +423,7 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                
                 uniq = [...new Set(availableQuiz)];
                 console.log(uniq);
-                res.send(uniq);
+                res.json(uniq);
             }
             getData();
         }

@@ -40,7 +40,13 @@ function Dashboard(){
                 method:"GET",
                 url:"http://127.0.0.1:4000/mainScr/teacher/quizDat"
             }).then((respon)=>{
-                console.log("complete");
+                let datq = respon.data;
+                let len1=  datq.length;
+                let datArray = [];
+                for(let i=0;i<len1;i++){
+                    datArray.push(JSON.parse(datq[i]));
+                }
+                
             }).catch(error=>console.log(error));
         }
         }).catch(err=>console.log(err));
