@@ -422,8 +422,37 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                 }
                
                 uniq = [...new Set(availableQuiz)];
-                console.log(uniq);
-                res.json(uniq);
+                let validcourses = [];
+                let coursesFromData = [];
+                let coursesToSend = [];
+                let dataToSend = [];
+                StudentJoinedCourses.find({email:studEmail},(err11,dat11)=>{
+                    dat11.forEach((dat12)=>{
+                        validcourses.push(dat12.course[0].crstud);
+                    })
+                    uniq.forEach((dat13)=>{
+                        let dat14 = JSON.parse(dat13);
+                        dat14 = dat14.course;
+                        coursesFromData.push(dat14);
+                    })
+                    validcourses.forEach((dat15)=>{
+                        if(coursesFromData.includes(dat15)){
+                            coursesToSend.push(dat15);
+                        }
+                        
+                    })
+                    uniq.forEach((dat16)=>{
+                        let dat17 = JSON.parse(dat16);
+                        if(coursesToSend.includes(dat17.course)){
+                            dataToSend.push(dat17);
+                        }
+                    })
+                    for(let i=0;i<dataToSend.length;i++){
+                        dataToSend[i]=JSON.stringify(dataToSend[i]);
+                    }
+                    res.json(dataToSend);
+                })
+               
             }
             getData();
         }

@@ -194,3 +194,13 @@ strong{
 #inputNumConf{
   width: 55%;
 }
+.renderQuizData li{
+  display: inline;
+  padding:5px ;
+  background-color: rgb(157, 131, 182);
+  
+}
+.renderQuizData{
+  width: fit-content;
+  margin-top: 5px;
+}

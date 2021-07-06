@@ -10,11 +10,26 @@ function EventDashboard(){
         <h1>Event Dashboard</h1>
     )
 }
+function Head(){
+    return <h1>Upcoming tests..</h1>
+}
 
+function RenderQuizData(props){
+    return <div className="renderQuizData">
+    
+    <li>{props.date}</li>
+    <li>{props.time}</li>
+    <li>{props.course}</li>
+    <li></li>
+    </div>
+}
 function Dashboard(){
     const [gotCourseData,setCourseData]=useState(false);
     const [dat,setDat] = useState([]);
     const [position,setPosition] = useState("");
+    const [studQuiz,setStudQuiz] = useState([]);
+    const [dataNotFound,setDataNotFound] = useState("Loading...");
+
     useEffect(()=>{
         axios({
             method:"GET",
@@ -43,9 +58,10 @@ function Dashboard(){
                 let datq = respon.data;
                 let len1=  datq.length;
                 let datArray = [];
-                for(let i=0;i<len1;i++){
-                    datArray.push(JSON.parse(datq[i]));
-                }
+                console.log(respon.data);
+                    let datq1 = datq.map(dat=>JSON.parse(dat));
+                    const newArr = [...datq1];
+                    setStudQuiz(newArr);
                 
             }).catch(error=>console.log(error));
         }
@@ -55,7 +71,6 @@ function Dashboard(){
     },[]);
     if(gotCourseData===true&&position==="teacher"){
         const dat1 = [...dat];
-        console.log(dat1);
         return <div className="dashClass">
             <h1 >My Courses</h1>
                 <div className="dash">
@@ -69,7 +84,26 @@ function Dashboard(){
         </div>
     }
     else if(position==="student"){
-        return <StudentDashBoard></StudentDashBoard>
+        let startTime = new Date();
+        startTime = startTime.getTime();
+        
+        if(studQuiz.length===0){
+            setTimeout(()=>{
+                let curTime = new Date();
+                curTime = curTime.getTime();
+                setDataNotFound("No test scheduled right now");
+            },5000);
+            return <h1>{dataNotFound}</h1>
+        }
+        
+        console.log(studQuiz);
+        let myarr = [...studQuiz];
+        console.log(myarr[0].date);
+        return <div>
+        <Head></Head>
+        {myarr.map(RenderQuizData)}
+        
+        </div>
     }
     else{
         return <h1>Loading...</h1>
