@@ -340,22 +340,7 @@ app.get("/data/studCourses",(req,res)=>{
         res.send(data);
     })
 })
-app.post("/mainScr/teacher/setQuiz",(req,res)=>{
-    AllEvents.updateOne({tEmail:teacherEmail},{
-        $push:{
-            teacherEvents:{
-                date:req.body.quizDate,
-                time:req.body.quizTime,
-                course:req.body.course
-            }
-        }
-    },(err,result)=>{
-        if(err){
-            console.log(err);
-        }
-        
-    })
-})
+
 app.get("/mainScr/teacher/courses",(req,res)=>{
     let reqC = [];
     QuizTeacherCourses.find({teacherEmail:teacherEmail},(err,data)=>{
@@ -458,6 +443,44 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
         }
     })
     
+})
+app.post("/mainScr/teacher/setQuiz",(req,res)=>{
+    AllEvents.updateOne({tEmail:teacherEmail},{
+        $push:{
+            teacherEvents:{
+                date:req.body.quizDate,
+                time:req.body.quizTime,
+                course:req.body.course
+            }
+        }
+    },(err,result)=>{
+        if(err){
+            console.log(err);
+        }
+        
+    })
+})
+app.get("/mainScr/teacher/setQuiz",(req,res)=>{
+    let quizAlreadySet = [];
+    AllEvents.find({tEmail:teacherEmail},(err,data)=>{
+        if(err){
+            throw err;
+        }
+        else{
+            
+            if(data.length===0){
+                console.log("Err");
+                res.send("Server side error");
+            }            
+            else{
+            let l1 = data[0].teacherEvents.length;
+            for (let i=1;i<l1;i++){
+                quizAlreadySet.push(data[0].teacherEvents[i].course);
+            }
+            res.send(quizAlreadySet);
+        }
+        }
+    })
 })
 app.get("/mainScr/teacher/studentboard",(req,res)=>{
     res.send(userPosition);

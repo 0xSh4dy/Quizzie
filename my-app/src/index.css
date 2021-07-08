@@ -204,3 +204,38 @@ strong{
   width: fit-content;
   margin-top: 5px;
 }
+.quizSetCourses{
+  background-color: rgb(160, 217, 224);
+  padding: 10px;
+  position: absolute;
+  top:6vh;
+  width: 100%;
+}
+.quizSetCourses button{
+  display: block;
+  margin-top: 7px;
+  border-radius: 10px;
+  padding: 7px;
+  background-color: rgb(165, 218, 113);
+  border:2px solid rgb(255, 250, 250);
+}
+#goback{
+  position: absolute;
+  right: 5vw;
+}
+.quizSettingPage{
+  background-color:rgb(160, 217, 224); 
+  position:absolute;
+  top:6vh;
+  width: 100%;
+  min-height: 100vh;
+}
+#gobck{
+  position: absolute;
+  right: 1vw;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 7px;
+  background-color: rgb(165, 218, 113);
+  border:2px solid rgb(255, 250, 250); 
+}
