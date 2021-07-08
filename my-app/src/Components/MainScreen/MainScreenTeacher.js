@@ -1,7 +1,7 @@
 import Navbar from "./Navbar";
 import Quiz from "./Quiz";
 import { useState } from "react";
-import QuizData from "./QuizQuestions";
+import QuizData from "./QuizHandler/QuizQuestions";
 function MainScreenT(){
     const [startQuiz,setStartQuiz] = useState(false);
     const [quizQuest,setQuizQuest] = useState(false);

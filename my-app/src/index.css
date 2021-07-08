@@ -239,3 +239,53 @@ strong{
   background-color: rgb(165, 218, 113);
   border:2px solid rgb(255, 250, 250); 
 }
+.setModeBtns{
+  text-align: center;
+}
+.setModeBtns button{
+  border-radius: 10px;
+  padding: 7px;
+  background-color: rgb(165, 218, 113);
+  border:2px solid rgb(255, 250, 250); 
+  color: blue;
+  margin-right: 10px;
+}
+.quizQuesInput{
+  background-image: -webkit-radial-gradient(circle, white, greenyellow);
+}
+.quizQuesInput input{
+  display: block;
+  margin: auto;
+  width: 30vw;
+  margin-top: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 2px solid blue;
+  height: 25px;
+}
+.quizQuesAside{
+  background-image: -webkit-radial-gradient(circle, white, orange);
+  width: 30vw;
+  padding: 5px;
+}
+.quizQuesAside div p{
+  word-wrap: break-word;
+  margin-top: 5px;
+  color: blue;
+}
+.headCenter{
+  text-align: center;
+  color: blueviolet;
+}
+.plusButton{
+  display: block;
+  margin: auto;
+  border-radius: 100%;
+  height: 35px;
+  width: 35px;
+  position: relative;
+  font-size: 25px;
+  border: 2px solid blue;
+  bottom: 10vh;
+  left: 20vw;
+}
