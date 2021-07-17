@@ -4,6 +4,7 @@ import Discussions from './Discussion';
 import Commands from './Commands';
 import {BrowserRouter as Router, Route, Switch,Link} from 'react-router-dom';
 import Logout from './Logout';
+import MobileNav from './MobileNav';
 function UserNameNav(){
   const loggedInUsername = sessionStorage.getItem("loggedInUsername");
     return <h2 style={{display:'inline', position:'absolute', right:10}}> Welcome, {loggedInUsername} !</h2>
@@ -13,8 +14,10 @@ function Navbar(){
     return (
         <Router>
         <div>
+        
           <nav>
-            <ul>
+            <ul class="navul">
+              
               <li>
                 <Link to="/dashboard">Dashboard</Link>
               </li>

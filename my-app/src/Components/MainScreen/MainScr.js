@@ -28,7 +28,7 @@ function MainScr(){
         return <MainScreenT></MainScreenT>
     }
     else{
-        return <div><h1>Connection error...
+        return <div style={{color:"red"}}><h1>Connection error...
         </h1>
             <Logout></Logout>
             </div>

@@ -2,6 +2,7 @@ import Navbar from "./Navbar";
 import Quiz from "./Quiz";
 import { useState } from "react";
 import QuizData from "./QuizHandler/QuizQuestions";
+import Hamburger from "./Hamburger";
 function MainScreenT(){
     const [startQuiz,setStartQuiz] = useState(false);
     const [quizQuest,setQuizQuest] = useState(false);
@@ -27,12 +28,13 @@ function MainScreenT(){
     
     if(quizQuest===true){
         return <div className="quizQuestions">
+        <Hamburger></Hamburger>    
         <Navbar></Navbar>
         <QuizData></QuizData>
         </div>
     }
     else if(startQuiz===false){
-        return <div> <Navbar></Navbar><MainScreenTItems></MainScreenTItems></div>
+        return <div> <Hamburger/> <Navbar></Navbar><MainScreenTItems></MainScreenTItems></div>
     }
     else if(startQuiz===true){
         return <div>

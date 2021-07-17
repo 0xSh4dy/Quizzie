@@ -121,7 +121,7 @@ function Login(){
             <button  onClick={handleClickLogin}>Signin</button>
             <button onClick={handleClickRegister}>Register</button>
             <h1>Quizzie: The new experience while giving tests</h1>
-            <h2>Smooth experience, no problems while reloading!</h2>
+            <h2>Smooth experience, superfast application</h2>
             </div>
            
         </div>

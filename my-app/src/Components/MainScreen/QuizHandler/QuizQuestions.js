@@ -8,23 +8,38 @@ var x =1;
 function goback(){
     window.location.reload();
 }
+
+var modeQuiz = "";
 function QuizData(props){
     const [gotData,setData] = useState(false);
     const [courseQuizData,setCourseQuizData] = useState([]);
     const [courseBtnClick,setCourseBtnClick] = useState("");
+    const [quizWithQuestionsSet,setQuizWithQuestionsSet] = useState([]);
     useEffect(()=>{
         axios({
             method:"GET",
             url:"http://127.0.0.1:4000/mainScr/teacher/setQuiz"
         }).then((resp)=>{
             setData(true);
-            setCourseQuizData([...resp.data]);
-            
-        
+            let questionsAlreadySet = resp.data.questionsSetQuiz;
+            let quizAlrSet = resp.data.alreadySetQuiz;
+            setCourseQuizData([...resp.data.alreadySetQuiz]);
+            setQuizWithQuestionsSet([...resp.data.questionsSetQuiz]);
+            for(let i=0;i<questionsAlreadySet.length;i++){
+                let datx = questionsAlreadySet[i];
+                quizAlrSet = quizAlrSet.filter((item)=>{
+                    return item!=datx;
+                })
+            }
+            setCourseQuizData([...quizAlrSet]);
         }).catch(err=>console.log(err));
     },[]);
+    
     function CourseQuizData(props){
-        return <button key={x++} onClick={()=>{setCourseBtnClick(props);console.log(props)}}>{props}</button>
+        return <button key={x++} onClick={()=>{setCourseBtnClick(props);
+            console.log(props);
+            modeQuiz=props;
+            sessionStorage.setItem("courseClick",props);}}>{props}</button>
     }
     if(courseBtnClick.length===0){
         

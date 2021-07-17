@@ -31,7 +31,6 @@ function Quiz(){
     function DisplayBtns(event){
         setConfigureQuiz(true);
         btnTextDat = event.target.value;
-        console.log(btnTextDat);
     }
     function ButtonCourses(prop){
         
@@ -49,8 +48,6 @@ function Quiz(){
     },[]);
     if(requestNow===true){
         const dat2 = [...buttonData];
-        console.log("huh");
-        console.log(configureQuiz);
         if(configureQuiz===false){
         return (
             <div className="quizDash">

@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -26,12 +27,19 @@ const TeacherCoursesSchema = mongoose.Schema({
 })
 const EventsSchema = mongoose.Schema({
     tEmail:String,
-    teacherEvents:[{date:String,time:String,course:String}]
+    teacherEvents:[{date:String,time:String,course:String,isSet:Boolean}]
 })
 const StudentCoursesSchema = mongoose.Schema({
     email:String,
     course:[{crstud:String,crteach:String}]
 })
+const QuestionSchema = new mongoose.Schema({
+    email:String,
+    courseQuiz:String,
+    courseQuestions:[{ques:String,option1:String,option2:String,option3:String,option4:String}],
+    courseAnswers:[{ans:String}]
+})
+const QuizQuestions = mongoose.model("quizQuestion",QuestionSchema);
 const QuizUsers = mongoose.model("quizuser",QuizUserSchema);
 const QuizTeacherCourses =mongoose.model("quizTeacherCourse",TeacherCoursesSchema);
 const StudentJoinedCourses = mongoose.model("studentJoincourse",StudentCoursesSchema);
@@ -83,7 +91,7 @@ app.post("/mainScr/register",(req,res)=>{
         });
         const newEvent = new AllEvents({
             tEmail:teacherEmail,
-            teacherEvents:[{date:"demo",time:"demo",course:"demo"}]
+            teacherEvents:[{date:"demo",time:"demo",course:"demo",isSet:false}]
         })
         newEvent.save((err,res)=>{
             if(err){
@@ -343,6 +351,7 @@ app.get("/data/studCourses",(req,res)=>{
 
 app.get("/mainScr/teacher/courses",(req,res)=>{
     let reqC = [];
+   
     QuizTeacherCourses.find({teacherEmail:teacherEmail},(err,data)=>{
         
         if(err){
@@ -367,6 +376,7 @@ app.get("/mainScr/teacher/courses",(req,res)=>{
 })
 app.get("/mainScr/teacher/quizDat",(req,res)=>{
     StudentJoinedCourses.find({email:studEmail},(err,data)=>{
+        
         if(err){
             console.log(err);
         }
@@ -397,7 +407,8 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                                     if(dat1[0].teacherEvents[j].date!='demo'){
                                         availableQuiz.push(JSON.stringify({date:dat1[0].teacherEvents[j].date,
                                         time:dat1[0].teacherEvents[j].time,
-                                         course:dat1[0].teacherEvents[j].course
+                                         course:dat1[0].teacherEvents[j].course,
+                                            isSet:dat1[0].teacherEvents[j].isSet
                                         }))
                                     }
                                 }
@@ -450,7 +461,8 @@ app.post("/mainScr/teacher/setQuiz",(req,res)=>{
             teacherEvents:{
                 date:req.body.quizDate,
                 time:req.body.quizTime,
-                course:req.body.course
+                course:req.body.course,
+                isSet:false
             }
         }
     },(err,result)=>{
@@ -462,6 +474,7 @@ app.post("/mainScr/teacher/setQuiz",(req,res)=>{
 })
 app.get("/mainScr/teacher/setQuiz",(req,res)=>{
     let quizAlreadySet = [];
+    let questionsSet = [];
     AllEvents.find({tEmail:teacherEmail},(err,data)=>{
         if(err){
             throw err;
@@ -476,13 +489,82 @@ app.get("/mainScr/teacher/setQuiz",(req,res)=>{
             let l1 = data[0].teacherEvents.length;
             for (let i=1;i<l1;i++){
                 quizAlreadySet.push(data[0].teacherEvents[i].course);
+                if(data[0].teacherEvents[i].isSet){
+                    questionsSet.push(data[0].teacherEvents[i].course);
+                }
             }
-            res.send(quizAlreadySet);
+            res.json({
+                alreadySetQuiz:quizAlreadySet,
+                questionsSetQuiz:questionsSet
+            }
+            );
         }
         }
     })
 })
 app.get("/mainScr/teacher/studentboard",(req,res)=>{
     res.send(userPosition);
+})
+app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
+    let dataReceived = req.body;
+    // const QuestionSchema = new mongoose.Schema({
+    //     email:String,
+    //     courseQuiz:String,
+    //     courseQuestions:[{ques:String,option1:String,option2:String,option3:String,option4:String}],
+    //     courseAnswers:[{ans:String}]
+    // })
+    let quesAnsData = [];
+    let ansData = [];
+    QuizQuestions.find({email:teacherEmail,courseQuiz:req.body.course},(err,data)=>{
+        console.log(data.length);
+        if(err){
+            console.log(err);
+        }
+        else if(data.length===0){
+            console.log("Not done");
+            let l1 = req.body.length;
+            for(let i=0;i<l1;i++){
+                quesAnsData.push({
+                    ques:dataReceived[i].question,
+                    option1:dataReceived[i].option1,
+                    option2:dataReceived[i].option2,
+                    option3:dataReceived[i].option3,
+                    option4:dataReceived[i].option4
+                })
+                ansData.push({ans:dataReceived[i].answer});
+                
+            }
+            
+            let dataToAdd = new QuizQuestions({
+                email:teacherEmail,
+                courseQuiz:req.body[0].course,
+                courseQuestions:quesAnsData,
+                courseAnswers:ansData
+            })
+            dataToAdd.save((error1,data1111)=>{
+                if(error1){
+                    console.log(error1);
+                }
+                else{
+                AllEvents.updateOne({"teacherEvents.course":req.body[0].course},{$set:{"teacherEvents.$.isSet":true,}},(myerr,mydat)=>{
+                    console.log("Updating...");
+                })
+            }
+            });
+            // const EventsSchema = mongoose.Schema({
+            //     tEmail:String,
+            //     teacherEvents:[{date:String,time:String,course:String,isSet:Boolean}]
+            // })
+
+            console.log(quesAnsData);
+            console.log(ansData);
+        }
+        else{
+            console.log("Done");
+            
+        }
+    })
+    
+    res.send("Done");
 })
 app.listen(4000);
