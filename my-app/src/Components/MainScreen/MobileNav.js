@@ -6,20 +6,20 @@ import Terminal from './Terminal';
 function MobileNav(){
     return <Router>
     <div className="mobileRouter">
-            <ul>
+                <div className="mobileRouterDiv">
                 <li>
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/dashboard" style={{color:"white"}}>Dashboard</Link>
                 </li>
                 <li>
-                    <Link to="/terminal">Terminal</Link>
+                    <Link to="/terminal" style={{color:"white"}}>Terminal</Link>
                 </li>
                 <li>
-                    <Link to="/discussions">Discussions</Link>
+                    <Link to="/discussions" style={{color:"white"}}>Discussions</Link>
                 </li>
                 <li>
-                    <Link to="/commands">Commands</Link>
+                    <Link to="/commands" style={{color:"white"}}>Commands</Link>
                 </li>
-            </ul>
+                </div>
            <Switch>
                <Route path="/dashboard">
                    <div className="mobileRoutes" id="mobileDashboard"><Dashboard/></div>

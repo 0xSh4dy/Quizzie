@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const mongoose = require('mongoose');
@@ -567,4 +569,4 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
     
     res.send("Done");
 })
-app.listen(4000);
+server.listen(process.env.port||4000);

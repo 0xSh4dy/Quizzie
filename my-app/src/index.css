@@ -114,18 +114,21 @@ nav{
   text-align: left;
   padding-left: 5px;
 }
-.dashboard{
-  background-color: orange;
 
+.dashClass h1{
+  color: red;
 }
 .discussions{
-  background-color: orange;
+  background-image: -webkit-radial-gradient(circle, lightgreen, orange);
 }
 .commands{
-  background-color: orange;
+  background-image: -webkit-radial-gradient(circle, lightgreen, orange);
+}
+.commands h1{
+  color: red;
 }
 strong{
-  color: white;
+  color: blue;
 }
 .commandsList{
   text-align: left;
@@ -134,9 +137,11 @@ strong{
 }
 .commandsList li{
   list-style: none;
+  margin-top: 10px;
 }
 .dash{
-  background-color: rgb(255, 95, 9);
+  background-image: -webkit-radial-gradient(circle, lightgreen, orange);
+
 }
 .dashClass{
   text-align: left;
@@ -147,7 +152,7 @@ strong{
   color:rgb(4, 37, 61) ;
 }
 .dashClass h1{
-  color: blueviolet;
+  color: red;
 }
 .quizDash{
   position: absolute;
@@ -303,6 +308,18 @@ strong{
   height: 15px;
   padding: 5px;
 }
+li{
+  list-style: none;
+}
+.nodata{
+  color: rgb(212, 194, 194);
+  margin-top: 10vh;
+  margin-left: 5px;
+  display: none;
+}
+.nodata p{
+  margin-top: 10px;
+}
 /* Hamburger */
 .navBurgerDiv{
   width: 40px;
@@ -316,13 +333,27 @@ strong{
   height: 24px;
   text-align: center;
 }
+.navBurger:active{
+  transform: rotate(90deg);
+}
 .mobileRouter{
-  width: 100vw;
-  height: 50vh;
-  background-color: cyan;
+  padding: 5px;
+  background-color: darkblue;
 }
 .mobileRoutes{
-  margin-top: 10px;
+  margin-top: 20px;
+}
+#mobileTerminal{
+  background-color: black;
+  color: rgb(21, 248, 21);
+}
+.terminalData1{
+  text-align: center;
+}
+#nodataLogout{
+  position: absolute;
+  top: 5px;
+  right: 10px;
 }
 @media only screen and (max-width:750px) and (min-width:570px){
   .buttons h1{
@@ -331,6 +362,12 @@ strong{
   .buttons h2{font-size: 25px;}
   .loginp{
     width: 35vw;
+  }
+  
+  .mobileRouterDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
   }
 }
 @media only screen and (max-width:569px) and (min-width:300px){
@@ -347,7 +384,17 @@ strong{
   form{
     margin-top: 25vh;
   }
-  
+  .mobileRouterDiv li{
+    margin-top: 5px;
+  }
+  .outputSection{
+    padding: 10px;
+    font-size: 15px;
+  } 
+  .commands h1{
+    font-size: 25px;
+
+  }
 }
 @media only screen and (max-width:299px) and (min-width:150px){
   .buttons h1{
@@ -361,6 +408,9 @@ strong{
   }
 }
 @media only screen and (max-width:700px){
+  .nodata{
+    display: block;
+  }
   .navBurger{
     display: block;
   }

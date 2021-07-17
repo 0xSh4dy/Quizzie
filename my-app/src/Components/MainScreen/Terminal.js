@@ -10,7 +10,7 @@ var sessName="";
 function Terminal(){
     const history = useHistory();
     function MainTerm(){
-        return (<div>
+        return (<div className="terminalData1">
             <h1>Terminal</h1>
             <input type="text" className="commandSection" placeholder="Enter commands here" onKeyDown={displayOutput} autoComplete="off"></input>
             <div className="outputSection">Welcome to the Quizzie platform made by Rakshit.

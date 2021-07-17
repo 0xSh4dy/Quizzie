@@ -1,8 +1,7 @@
 function Commands(){
     return <div className="commands">
-        <h1>This is the commands page</h1>
         <div className="commandsList">
-            <h2>List of available commands are:</h2>
+            <h1>List of available commands are:</h1>
             <li><strong>render nameOfPage </strong>&nbsp; To render a page. For example: <strong>&nbsp; render dashboard</strong></li>
             <li><strong>help </strong>&nbsp; View the help menu. For example:  <strong>&nbsp; help</strong></li>
             <li><strong>show commands </strong>&nbsp; To view all the commands in the terminal</li>
