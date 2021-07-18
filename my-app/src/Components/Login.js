@@ -122,6 +122,8 @@ function Login(){
             <button onClick={handleClickRegister}>Register</button>
             <h1>Quizzie: The new experience while giving tests</h1>
             <h2>Smooth experience, superfast application</h2>
+            <h2>Contains inbuilt command terminal</h2>
+            <h2>Contains inbuilt chat application</h2>
             </div>
            
         </div>

@@ -195,6 +195,7 @@ strong{
   border: 2px solid white;
   border-radius: 5px;
 }
+
 #inputNumConf{
   width: 55%;
 }
@@ -202,6 +203,7 @@ strong{
   display: inline;
   padding:5px ;
   background-color: rgb(157, 131, 182);
+  color: white;
   
 }
 .renderQuizData{
@@ -228,7 +230,7 @@ strong{
   right: 5vw;
 }
 .quizSettingPage{
-  background-color:rgb(160, 217, 224); 
+  background-image: url("./mainbg2.gif"); 
   position:absolute;
   top:6vh;
   width: 100%;
@@ -254,9 +256,7 @@ strong{
   color: blue;
   margin-right: 10px;
 }
-.quizQuesInput{
-  background-image: -webkit-radial-gradient(circle, white, greenyellow);
-}
+
 .quizQuesInput input{
   display: block;
   margin: auto;
@@ -268,7 +268,8 @@ strong{
   height: 25px;
 }
 .quizQuesAside{
-  background-image: -webkit-radial-gradient(circle, white, orange);
+  /* background-image: -webkit-radial-gradient(circle, white, orange); */
+  background-color: rgb(192, 199, 206);
   width: 30vw;
   padding: 5px;
 }
@@ -279,7 +280,22 @@ strong{
 }
 .headCenter{
   text-align: center;
-  color: blueviolet;
+  color: orangered;
+}
+.objectiveBtns{
+  text-align: center;
+  padding: 5px;
+}
+.objectiveBtns button{
+  border-radius:5px ;
+  border: 2px solid white;
+  background-color: aqua;
+  padding: 5px;
+  font-size: 15px;
+  margin-right: 15px;
+}
+.objectiveBtns button hover{
+  cursor: pointer;
 }
 .plusButton{
   display: block;
@@ -350,11 +366,56 @@ li{
 .terminalData1{
   text-align: center;
 }
+.discussions{
+  min-height: 100vh;
+}
+.discData{
+  position: fixed;
+  bottom: 25px;
+  padding: 10px;
+  background-color: blue;
+  
+}
+.discussions h1{
+  color: rgb(25, 25, 136);
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.discMsgs{
+  margin-top: 7px;
+}
+.discMsgs :first-child{
+  color: rgb(179, 19, 19);
+}
+.discMsgs  :nth-child(2){
+  color: rgb(19, 19, 146);
+}
+.discussionMessages{
+  margin-top: 7px;
+  padding: 5px;
+  text-align: left;
+}
+.discData input{
+  width: 20vw;
+  margin-left: 10px;
+}
+.discData button{
+  border-radius:5px ;
+  border: 2px solid white;
+  background-color: cyan;
+  padding: 5px;
+  margin-left: 20px;
+  font-size: 15px;
+}
+.discData button:hover{
+  cursor: pointer;
+}
+
 #nodataLogout{
   position: absolute;
   top: 5px;
   right: 10px;
 }
+
 @media only screen and (max-width:750px) and (min-width:570px){
   .buttons h1{
     font-size: 25px;
@@ -395,6 +456,7 @@ li{
     font-size: 25px;
 
   }
+  
 }
 @media only screen and (max-width:299px) and (min-width:150px){
   .buttons h1{

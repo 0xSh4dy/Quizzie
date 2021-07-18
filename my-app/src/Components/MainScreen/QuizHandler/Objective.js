@@ -5,7 +5,6 @@ import { useState } from "react";
 import axios from "axios";
 import modeQuiz from './QuizQuestions';
 let quizQuestionData = [];
-const value = sessionStorage.getItem("courseClick");
 
 function Objective(){
     const [qsNum,setQsNum] = useState(1);
@@ -21,6 +20,7 @@ function Objective(){
         setQuest(event.target.value);
     }
     function StoreData(){
+    const value = sessionStorage.getItem("courseClick");
         
         const myData = {course:value,question:quest,option1:opt1,option2:opt2,option3:opt3,option4:opt4,answer:ans};
         setResult(result=>[...result,myData]);
@@ -41,6 +41,7 @@ function Objective(){
             data:quizQuestionData
           }).then((resp)=>{
             setSubmitted(true);
+            sessionStorage.removeItem("courseClick");
             alert("Questions set!");
             window.location.reload();
           })
@@ -66,9 +67,11 @@ function Objective(){
     <input type="text" placeholder="Enter option 4" value={opt4} onChange={(e)=>{setOpt4(e.target.value)}}></input>
     <input type="text" placeholder="Enter correct answer" value={ans} onChange={(e)=>{setAns(e.target.value)}}></input>
     <button className="plusButton" onClick={StoreData}>+</button>
-    <button id="submitQs" onClick={SubmitQuestions}>Submit</button>
     </div>
-    <button onClick={()=>{window.location.reload()}}>GoBack</button>
+    <div className="objectiveBtns">
+    <button id="submitQs" onClick={SubmitQuestions}>Submit</button>
+    <button id="moveback" onClick={()=>{window.location.reload()}}>GoBack</button>
+    </div>
     </div>
 }
 export default Objective;

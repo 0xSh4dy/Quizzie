@@ -5,6 +5,7 @@ function Logout(){
     sessionStorage.removeItem("position");
     sessionStorage.removeItem("loggedInUsername");
     sessionStorage.removeItem("logEmail");
+    sessionStorage.removeItem("courseClick");
     if(teacherLog){
         sessionStorage.removeItem("teacherLog");
     }

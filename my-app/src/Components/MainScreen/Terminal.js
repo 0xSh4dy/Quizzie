@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router';
+import { useRef } from 'react';
 import CommandList from './CommandList';
 import HelpText from './HelpItems';
 import axios from "axios";
@@ -9,11 +10,12 @@ var sessEmail = sessionStorage.getItem("logEmail");
 var sessName="";
 function Terminal(){
     const history = useHistory();
+    var outputSec = useRef(null);
     function MainTerm(){
         return (<div className="terminalData1">
             <h1>Terminal</h1>
             <input type="text" className="commandSection" placeholder="Enter commands here" onKeyDown={displayOutput} autoComplete="off"></input>
-            <div className="outputSection">Welcome to the Quizzie platform made by Rakshit.
+            <div ref={outputSec} className="outputSection">Welcome to the Quizzie platform made by Rakshit.
             Type <strong>help</strong> in the input section to get started. Or, type  <strong>show commands</strong> in the input section to view the list of available commands</div>
             </div>
         )
@@ -26,7 +28,6 @@ function Terminal(){
         }).then((resp)=>{
             inpPos = resp.data;
         }).catch(error=>console.log(error));
-        let outputSec = document.querySelector(".outputSection");
         
         if(e.code==="Enter"){
            
@@ -59,8 +60,19 @@ function Terminal(){
                     history.push("/commands");
                 }
                 else{
-                    outputSec.innerHTML = "$ Invalid page. Pages available to render through the render command are dashboard, discussions and commands"
+                    outputSec.current.innerHTML = "$ Invalid page. Pages available to render through the render command are dashboard, discussions and commands"
                 }
+            }
+            else if(inputCommand==="logout"){
+                sessionStorage.removeItem("isLoggedIn");
+                sessionStorage.removeItem("position");
+                sessionStorage.removeItem("loggedInUsername");
+                sessionStorage.removeItem("logEmail");
+            
+                if(sessionStorage.getItem("teacherLog")){
+                sessionStorage.removeItem("teacherLog");
+                }
+              window.location.reload();
             }
             else if(inputCommand==="show"){
                 if(inputCmdDat==="commands"){
@@ -68,7 +80,7 @@ function Terminal(){
                     for(let i=0;i<CommandList.length;i++){
                         strCommands+=CommandList[i]+'</br>';
                     }
-                    outputSec.innerHTML = strCommands;
+                    outputSec.current.innerHTML = strCommands;
                 }
                 else if(inputCmdDat==="courses"){
                     if(inpPos==="teacher"){
@@ -80,7 +92,7 @@ function Terminal(){
                         for(let i=0;i<(resp.data).length;i++){
                             respDat = respDat+resp.data[i]+'</br>'
                         }
-                        outputSec.innerHTML = respDat;
+                        outputSec.current.innerHTML = respDat;
                     }).catch(err=>console.log(err));
                 }
                 else if(inpPos==="student"){
@@ -93,23 +105,23 @@ function Terminal(){
                     for(let k=1;k<respons.data.length;k++){
                         studCourse.push(respons.data[k].course[0].crstud+'</br>');
                     }
-                    outputSec.innerHTML=`Courses in which you have participated are: ${studCourse}`
+                    outputSec.current.innerHTML=`Courses in which you have participated are: ${studCourse}`
                 }).catch(err=>console.log(err));
                 }
                 }
             }
             else if(inputCommand==="clear"){
                 if(inputCmdDat!=""){
-                    outputSec.innerHTML= "clear expects no arguments"
+                    outputSec.current.innerHTML= "clear expects no arguments"
                 }
                 else{
-                    outputSec.innerHTML = "";
+                    outputSec.current.innerHTML = "";
                 }
             }
 
             else if(inputCommand==="create-course"){
                 if(inputCmdDat===""){
-                    outputSec.innerHTML = "Error, course name can't be empty";
+                    outputSec.current.innerHTML = "Error, course name can't be empty";
                 }
                 else{
                     if(inpPos==="teacher"){
@@ -120,32 +132,33 @@ function Terminal(){
                         data:body
                     }).then((resp)=>{
                         if(resp.status>500){
-                            outputSec.innerHTML = "Server side error";
+                            outputSec.current.innerHTML = "Server side error";
                         }
                         else if(resp.data==="Yes" ){
-                            outputSec.innerHTML = `Created a new course ${inputCmdDat}`;
+                            outputSec.current.innerHTML = `Created a new course ${inputCmdDat}`;
+                            sessionStorage.setItem("courseClick",inputCmdDat)
                         }
                         
                         else{
-                            outputSec.innerHTML = "Oops, some error occured. Please try again";
+                            outputSec.current.innerHTML = "Oops, some error occured. Please try again";
                         }
 
                     }).catch(error=>console.log(error));
                 }
                 else if(inpPos==="student"){
-                    outputSec.innerHTML="Only teachers can create courses";
+                    outputSec.current.innerHTML="Only teachers can create courses";
                 }
                 else{
-                    outputSec.innerHTML = "Oops, some connection error. Please try again";
+                    outputSec.current.innerHTML = "Oops, some connection error. Please try again";
                 }
                 }
             }
             else if(inputCommand==="help"){
-                 outputSec.innerHTML = HelpText;
+                 outputSec.current.innerHTML = HelpText;
             }
             else if(inputCommand==="delete-course"){
                 if(inputCmdDat===""){
-                    outputSec.innerHTML = "Course can't be empty";
+                    outputSec.current.innerHTML = "Course can't be empty";
                 }
                 else{
                     if(inpPos==="teacher"){
@@ -157,16 +170,16 @@ function Terminal(){
                       url:'http://127.0.0.1:4000/mainScr/teacher/delete',
                       data:body
                     }).then((resp)=>{
-                        if(resp.data==="Yes"){outputSec.innerHTML=`Deleted the course ${inputCmdDat}`}
+                        if(resp.data==="Yes"){outputSec.current.innerHTML=`Deleted the course ${inputCmdDat}`}
                         else{
-                            outputSec.innerHTML="Failed to delete the course. Either the course does not exist, or there is some connecton error."
+                            outputSec.current.innerHTML="Failed to delete the course. Either the course does not exist, or there is some connecton error."
                         }
                     }).catch((err)=>{
-                        outputSec.innerHTML=err;
+                        outputSec.current.innerHTML=err;
                     })
                 }
                 else if(inpPos==="student"){
-                    outputSec.innerHTML = "Students cannot delete courses";
+                    outputSec.current.innerHTML = "Students cannot delete courses";
                 }
                 }
             }
@@ -186,20 +199,20 @@ function Terminal(){
                     data:body
                 }).then((resp)=>{
                     if(resp.data==="Yes"){
-                outputSec.innerHTML = `Joined a new course ${joinCmdSub} and teacher name is ${joinCmdEmail}`
+                outputSec.current.innerHTML = `Joined a new course ${joinCmdSub} and teacher name is ${joinCmdEmail}`
 
                     }
                     else if(resp.data==="No"){
-                        outputSec.innerHTML = "Invalid course name or invalid email";
+                        outputSec.current.innerHTML = "Invalid course name or invalid email";
                     }
                     else if(resp.data==="Naah"){
-                        outputSec.innerHTML = "You have already registered for that course";
+                        outputSec.current.innerHTML = "You have already registered for that course";
                     }
                 }).catch(err=>console.log(err));
                 
             }
             else{
-                outputSec.innerHTML = "Invalid command! Type show commands to view all commands or click on the commands list GUI to view them."
+                outputSec.current.innerHTML = "Invalid command! Type show commands to view all commands or click on the commands list GUI to view them."
             }
         }
      

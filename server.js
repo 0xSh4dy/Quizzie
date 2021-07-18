@@ -2,39 +2,89 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const saltRounds=10;
+const socketio = require('socket.io');
+const io = socketio(server,{cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }});
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 var userPosition = "";
 var uName="";
 var teacherEmail="";
 var studEmail = "";
 var studName="";
+var users = [];
+const addUser = ({id,name,room})=>{
+    const user = {id,name,room};
+    users.push(user);
+    return user;
+}
+const removeUser = (id)=>{
+    const index = users.findIndex((user)=>user.id===id);
+    if(index!=-1){
+        return users.splice(index,1)[0];
+    }
+}
+const getUser = (id)=>users.find((user)=>user.id===id);
+const getUsersInRoom = (room)=>users.filter((user)=>user.room===room);
 const connection_url = 'mongodb+srv://admin:BoAoAuyCcujHi0Ln@cluster0.qni0g.mongodb.net/NarutoDB?retryWrites=true&w=majority';
 mongoose.connect(connection_url,{useUnifiedTopology:true,useCreateIndex:true,useNewUrlParser:true});
+
+// Schema for users
 const QuizUserSchema = mongoose.Schema({
     name:String,
     password:String,
     email:String,
     position:String
 })
+
+// Client side socket
+io.on('connection',(socket)=>{
+    socket.on('join',({name,room},callback)=>{
+        const user = addUser({id:socket.id,name,room});
+        const usr = getUser(socket.id);
+        // Auto generated messages
+        socket.emit('message',{user:'quizzie',text:`${user.name}, welcome to the discussions zone`});
+        
+        // Join joins a user in a room
+        socket.join(user.room);
+        
+    })
+    socket.on('sendMessage',(message,callback)=>{
+        const user = getUser(socket.id);
+        io.to(user.room).emit('message',{user:user.name,text:message});
+    })
+    socket.on('disconnec',()=>{
+        console.log("User left");
+    })
+})
+//Schema for courses made by teachers
 const TeacherCoursesSchema = mongoose.Schema({
     teacherEmail:String,
     teacherName:String,
     courses:[{crs:String}],
     studentData:[{studentName:String,studentEmail:String,studentCourse:String}]
 })
+
+//Schema for Quiz events
 const EventsSchema = mongoose.Schema({
     tEmail:String,
     teacherEvents:[{date:String,time:String,course:String,isSet:Boolean}]
 })
+
+//Schema for courses that a student has registered for 
 const StudentCoursesSchema = mongoose.Schema({
     email:String,
     course:[{crstud:String,crteach:String}]
 })
+
+//Schema for questions set by a teacher for a quiz
 const QuestionSchema = new mongoose.Schema({
     email:String,
     courseQuiz:String,
@@ -46,8 +96,6 @@ const QuizUsers = mongoose.model("quizuser",QuizUserSchema);
 const QuizTeacherCourses =mongoose.model("quizTeacherCourse",TeacherCoursesSchema);
 const StudentJoinedCourses = mongoose.model("studentJoincourse",StudentCoursesSchema);
 const AllEvents = mongoose.model("allEvent",EventsSchema);
-app.use(express.urlencoded({extended:true}));
-app.use(cors());
 app.get("/",(req,res)=>{
     res.send("Welcome to our site");
 })
@@ -104,6 +152,7 @@ app.post("/mainScr/register",(req,res)=>{
    res.send("Yes"); 
 })
 app.post("/mainScr/signin",(req,res)=>{
+    
     uName = req.body.name;
     QuizUsers.findOne({email:req.body.email},(err,data)=>{
         if(err){
@@ -398,6 +447,10 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                         if(err1){
                             console.log(err1);
                         }
+                        // const EventsSchema = mongoose.Schema({
+                        //     tEmail:String,
+                        //     teacherEvents:[{date:String,time:String,course:String,isSet:Boolean}]
+                        // })
                         else{
                             if(dat1.length===0){
                                 console.log("Error");
@@ -517,8 +570,9 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
     // })
     let quesAnsData = [];
     let ansData = [];
-    QuizQuestions.find({email:teacherEmail,courseQuiz:req.body.course},(err,data)=>{
+    QuizQuestions.find({email:teacherEmail,courseQuiz:req.body[0].course},(err,data)=>{
         console.log(data.length);
+        console.log(data);
         if(err){
             console.log(err);
         }
@@ -548,8 +602,11 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
                     console.log(error1);
                 }
                 else{
-                AllEvents.updateOne({"teacherEvents.course":req.body[0].course},{$set:{"teacherEvents.$.isSet":true,}},(myerr,mydat)=>{
+                    console.log(teacherEmail);
+                    console.log(req.body[0].course);
+                AllEvents.updateOne({tEmail:teacherEmail,"teacherEvents.course":req.body[0].course},{$set:{"teacherEvents.$.isSet":true,}},(myerr,mydat)=>{
                     console.log("Updating...");
+                    
                 })
             }
             });

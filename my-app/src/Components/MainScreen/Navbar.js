@@ -16,7 +16,7 @@ function Navbar(){
         <div>
         
           <nav>
-            <ul class="navul">
+            <ul className="navul">
               
               <li>
                 <Link to="/dashboard">Dashboard</Link>

@@ -13,9 +13,9 @@ function EventDashboard(){
 function Head(){
     return <h1>Upcoming tests..</h1>
 }
-
+let x1 = 0;
 function RenderQuizData(props){
-    return <div className="renderQuizData">
+    return <div className="renderQuizData" key={x1++}>
     
     <li>{props.date}</li>
     <li>{props.time}</li>
@@ -47,7 +47,7 @@ function Dashboard(){
         }).then((results)=>{
             if(results.data!="No"){
             setDat(results.data);
-            
+        
             setCourseData(true);
         }
         else if(results.data==="No"){
@@ -62,7 +62,7 @@ function Dashboard(){
                     let datq1 = datq.map(dat=>JSON.parse(dat));
                     const newArr = [...datq1];
                     setStudQuiz(newArr);
-                
+                    console.log(newArr);
             }).catch(error=>console.log(error));
         }
         }).catch(err=>console.log(err));
@@ -92,8 +92,8 @@ function Dashboard(){
                 let curTime = new Date();
                 curTime = curTime.getTime();
                 setDataNotFound("No test scheduled right now");
-            },5000);
-            return <h1>{dataNotFound}</h1>
+            },10000);
+            return <h1 style={{color:"white"}}>{dataNotFound}</h1>
         }
         
         console.log(studQuiz);
@@ -106,7 +106,7 @@ function Dashboard(){
         </div>
     }
     else{
-        return <h1>Loading...</h1>
+        return <h1 style={{color:"white"}}>Loading...</h1>
     }
     
 }
