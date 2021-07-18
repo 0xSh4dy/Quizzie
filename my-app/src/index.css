@@ -416,6 +416,9 @@ li{
   right: 10px;
 }
 
+.renderQuizData{
+  color: white;
+}
 @media only screen and (max-width:750px) and (min-width:570px){
   .buttons h1{
     font-size: 25px;

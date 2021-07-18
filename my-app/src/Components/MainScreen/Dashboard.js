@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import axios from "axios";
 import StudentDashBoard from './StudentDashboard';
+import RealQuiz from '../MainScreen/QuizHandler/RealQuiz';
 let a =1;
 function MyCourses(props){
     return <li key={a++}>{props}</li>
@@ -14,22 +15,18 @@ function Head(){
     return <h1>Upcoming tests..</h1>
 }
 let x1 = 0;
-function RenderQuizData(props){
-    return <div className="renderQuizData" key={x1++}>
-    
-    <li>{props.date}</li>
-    <li>{props.time}</li>
-    <li>{props.course}</li>
-    <li></li>
-    </div>
-}
+
 function Dashboard(){
     const [gotCourseData,setCourseData]=useState(false);
     const [dat,setDat] = useState([]);
     const [position,setPosition] = useState("");
     const [studQuiz,setStudQuiz] = useState([]);
     const [dataNotFound,setDataNotFound] = useState("Loading...");
-
+    const [startTime,setStartTime] = useState(1000);
+    const [startNow,setStartNow] = useState(false);
+    function activateTrigger(){
+        setStartNow(true);
+    }
     useEffect(()=>{
         axios({
             method:"GET",
@@ -63,12 +60,25 @@ function Dashboard(){
                     const newArr = [...datq1];
                     setStudQuiz(newArr);
                     console.log(newArr);
+                    setTimeout(()=>{
+                        activateTrigger();
+                    },12000)
             }).catch(error=>console.log(error));
+
         }
         }).catch(err=>console.log(err));
 
        
     },[]);
+    function RenderQuizData(props){
+        return <div className="renderQuizData" key={x1++}>
+        
+        <li>{props.date}</li>
+        <li>{props.time}</li>
+        <li>{props.course}</li>
+        {startNow===true?<li>start</li>:<li>later</li>}
+        </div>
+    }
     if(gotCourseData===true&&position==="teacher"){
         const dat1 = [...dat];
         return <div className="dashClass">
