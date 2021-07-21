@@ -14,6 +14,7 @@ function EventDashboard(){
 function Head(){
     return <h1>Upcoming tests..</h1>
 }
+
 let x1 = 0;
 
 function Dashboard(){
@@ -24,7 +25,8 @@ function Dashboard(){
     const [dataNotFound,setDataNotFound] = useState("Loading...");
     const [startTime,setStartTime] = useState(1000);
     const [startNow,setStartNow] = useState(false);
-
+    const [startTimings,setStartTimings] = useState([]);
+    const [timingsSet,setTimingsSet] = useState(false);
         useEffect(()=>{
             axios({
                 method:"GET",
@@ -62,17 +64,13 @@ function Dashboard(){
                           quizDate = quizDate.getTime();
                           quizDate+=(quizActT1+quizActT2);
                           let remTime = quizDate-currentDate;
-                          console.log(remTime);
 
                           let dataStore = {time:remTime,course:newArr[j1].course}
                           quizTimings.push(dataStore);
                         }
-                        console.log(quizTimings);
-                        quizTimings.forEach((item) => {
-                          if(item.time>=0){
-                            setTimeout(activateTrigger,item.time);
-                            }
-                        });
+                        setStartTimings([...quizTimings]);
+                        setTimingsSet(true);
+
 
                 }).catch(error=>console.log(error));
 
@@ -99,6 +97,8 @@ function Dashboard(){
         }
     }
     function RenderQuizData(props){
+
+
         return <div className="renderQuizData" key={x1++}>
 
         <li>{props.date}</li>
@@ -106,6 +106,7 @@ function Dashboard(){
         <li>{props.course}</li>
         {startNow===true?<li>start</li>:<li>later</li>}
         </div>
+
     }
     if(gotCourseData===true&&position==="teacher"){
         const dat1 = [...dat];
@@ -137,11 +138,16 @@ function Dashboard(){
         console.log(studQuiz);
         let myarr = [...studQuiz];
         console.log(myarr[0].date);
+        if(timingsSet===false){
         return <div>
         <Head></Head>
         {myarr.map(RenderQuizData)}
-
         </div>
+        }
+        else{
+          {sessionStorage.setItem("courseName",startTimings[0].course)}
+          return <RealQuiz/>
+        }
     }
     else{
         return <h1 style={{color:"white"}}>Loading...</h1>

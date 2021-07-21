@@ -51,10 +51,10 @@ io.on('connection',(socket)=>{
         const usr = getUser(socket.id);
         // Auto generated messages
         socket.emit('message',{user:'quizzie',text:`${user.name}, welcome to the discussions zone`});
-        
+
         // Join joins a user in a room
         socket.join(user.room);
-        
+
     })
     socket.on('sendMessage',(message,callback)=>{
         const user = getUser(socket.id);
@@ -78,7 +78,7 @@ const EventsSchema = mongoose.Schema({
     teacherEvents:[{date:String,time:String,course:String,isSet:Boolean}]
 })
 
-//Schema for courses that a student has registered for 
+//Schema for courses that a student has registered for
 const StudentCoursesSchema = mongoose.Schema({
     email:String,
     course:[{crstud:String,crteach:String}]
@@ -137,7 +137,7 @@ app.post("/mainScr/register",(req,res)=>{
             if(err){
                 console.log(err);
             }
-            
+
         });
         const newEvent = new AllEvents({
             tEmail:teacherEmail,
@@ -149,10 +149,10 @@ app.post("/mainScr/register",(req,res)=>{
             }
         });
     }
-   res.send("Yes"); 
+   res.send("Yes");
 })
 app.post("/mainScr/signin",(req,res)=>{
-    
+
     uName = req.body.name;
     QuizUsers.findOne({email:req.body.email},(err,data)=>{
         if(err){
@@ -198,7 +198,7 @@ app.post("/mainScr/teacher/courses",(req,res)=>{
         if(err){
             console.log(err);
         }
-        
+
     })
     QuizTeacherCourses.updateOne({
         teacherEmail:teacherEmail
@@ -207,9 +207,9 @@ app.post("/mainScr/teacher/courses",(req,res)=>{
         if(err){
             console.log(err);
         }
-       
+
     })
-  
+
 })
 app.post("/mainScr/teacher/join",(req,res)=>{
     let reqCourse = req.body.studentCrsRequest;
@@ -227,9 +227,9 @@ app.post("/mainScr/teacher/join",(req,res)=>{
         else if(data.position==="student"||data.position==="teacher"){
             isValidEmail=true;
         }
-       
+
         if(isValidEmail){
-            
+
             QuizTeacherCourses.find({teacherEmail:reqEmail},(err2,dat2)=>{
                 if(err2){console.log(err2)}
                 else{
@@ -239,7 +239,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                     if(arrCrs.includes(reqCourse)){
                         isValidCourse=true;
                     }
-                    
+
                     if(isValidCourse){
                         let alreadyRegistered = false;
                         let done=false;
@@ -256,7 +256,7 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                     alreadyRegistered=true;
                                 }
                                 if(alreadyRegistered===false){
-                                    
+
                                     const studDat = new StudentJoinedCourses({email:studEmail,
                                         course:[{crstud:reqCourse,crteach:reqEmail}]
                                     })
@@ -266,24 +266,24 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                         }
                                         else{
                                             done=true;
-    
+
                                             QuizTeacherCourses.updateOne({teacherEmail:reqEmail},{
-                                                $push:{studentData:{studentName:studName,studentEmail:studEmail,studentCourse:reqCourse}}          
+                                                $push:{studentData:{studentName:studName,studentEmail:studEmail,studentCourse:reqCourse}}
                                                },(err1,dat1)=>{
                                                    if(err1){
                                                        console.log(err1);
                                                    }
                                                    else{
                                                     res.send("Yes");
-                                                       
-                                                   
+
+
                                                    }
-                                                   
+
                                                })
 
                                         }
                                     });
-                                    
+
                                 }
                                 else if(alreadyRegistered===true){
                                     StudentJoinedCourses.find({email:studEmail}
@@ -311,38 +311,38 @@ app.post("/mainScr/teacher/join",(req,res)=>{
                                                     else{
                                                         done=true;
                                                         QuizTeacherCourses.updateOne({teacherEmail:reqEmail},{
-                                                            $push:{studentData:{studentName:studName,studentEmail:studEmail,studentCourse:reqCourse}}          
+                                                            $push:{studentData:{studentName:studName,studentEmail:studEmail,studentCourse:reqCourse}}
                                                            },(err1,dat1)=>{
                                                                if(err1){
                                                                    console.log(err1);
                                                                }
                                                                else{
                                                                 res.send("Yes");
-                                                                   
-                                                               
+
+
                                                                }
-                                                               
+
                                                            })
-                                                        
+
                                                     }
                                                 })
-                                               
+
                                             }
                                         })
-                                    
+
                                 }
                             }
                         })
-                        
-                        
-                            
+
+
+
                     }
                     else{
                         res.send("No");
                     }
                 }
             })
-            
+
         }
         else{
             res.send("No");
@@ -369,7 +369,7 @@ app.get("/data/courses",(req,res)=>{
         for(let i=0;i<len;i++){
             courseData.push(data[0].courses[i].crs);
         }
-        res.send(courseData);        
+        res.send(courseData);
     })
 })
 app.get("/mainScr/authRenderer",(req,res)=>{
@@ -377,7 +377,7 @@ app.get("/mainScr/authRenderer",(req,res)=>{
         if(err){
             console.log(err);
         }
-       
+
     })
     res.send(userPosition);
 })
@@ -402,32 +402,32 @@ app.get("/data/studCourses",(req,res)=>{
 
 app.get("/mainScr/teacher/courses",(req,res)=>{
     let reqC = [];
-   
+
     QuizTeacherCourses.find({teacherEmail:teacherEmail},(err,data)=>{
-        
+
         if(err){
             console.log(err);
         }
-        
+
         else{
             if(data.length===0){
                 res.send("No");
             }
             else{
-                
+
                 let length2 = data[0].courses.length;
             for(let i=0;i<length2;i++){
                 reqC.push(data[0].courses[i].crs);
-            }  
+            }
             res.send(reqC);
             }
-            
+
         }
     })
 })
 app.get("/mainScr/teacher/quizDat",(req,res)=>{
     StudentJoinedCourses.find({email:studEmail},(err,data)=>{
-        
+
         if(err){
             console.log(err);
         }
@@ -456,7 +456,7 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                                 console.log("Error");
                             }
                             else{
-                                
+
                                 let eventLength = dat1[0].teacherEvents.length;
                                 for(let j=0;j<eventLength;j++){
                                     if(dat1[0].teacherEvents[j].date!='demo'){
@@ -471,7 +471,7 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                         }
                     })
                 }
-               
+
                 uniq = [...new Set(availableQuiz)];
                 let validcourses = [];
                 let coursesFromData = [];
@@ -490,7 +490,7 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                         if(coursesFromData.includes(dat15)){
                             coursesToSend.push(dat15);
                         }
-                        
+
                     })
                     uniq.forEach((dat16)=>{
                         let dat17 = JSON.parse(dat16);
@@ -503,12 +503,12 @@ app.get("/mainScr/teacher/quizDat",(req,res)=>{
                     }
                     res.json(dataToSend);
                 })
-               
+
             }
             getData();
         }
     })
-    
+
 })
 app.post("/mainScr/teacher/setQuiz",(req,res)=>{
     AllEvents.updateOne({tEmail:teacherEmail},{
@@ -524,7 +524,7 @@ app.post("/mainScr/teacher/setQuiz",(req,res)=>{
         if(err){
             console.log(err);
         }
-        
+
     })
 })
 app.get("/mainScr/teacher/setQuiz",(req,res)=>{
@@ -535,11 +535,11 @@ app.get("/mainScr/teacher/setQuiz",(req,res)=>{
             throw err;
         }
         else{
-            
+
             if(data.length===0){
                 console.log("Err");
                 res.send("Server side error");
-            }            
+            }
             else{
             let l1 = data[0].teacherEvents.length;
             for (let i=1;i<l1;i++){
@@ -562,12 +562,7 @@ app.get("/mainScr/teacher/studentboard",(req,res)=>{
 })
 app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
     let dataReceived = req.body;
-    // const QuestionSchema = new mongoose.Schema({
-    //     email:String,
-    //     courseQuiz:String,
-    //     courseQuestions:[{ques:String,option1:String,option2:String,option3:String,option4:String}],
-    //     courseAnswers:[{ans:String}]
-    // })
+
     let quesAnsData = [];
     let ansData = [];
     QuizQuestions.find({email:teacherEmail,courseQuiz:req.body[0].course},(err,data)=>{
@@ -588,9 +583,9 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
                     option4:dataReceived[i].option4
                 })
                 ansData.push({ans:dataReceived[i].answer});
-                
+
             }
-            
+
             let dataToAdd = new QuizQuestions({
                 email:teacherEmail,
                 courseQuiz:req.body[0].course,
@@ -606,7 +601,7 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
                     console.log(req.body[0].course);
                 AllEvents.updateOne({tEmail:teacherEmail,"teacherEvents.course":req.body[0].course},{$set:{"teacherEvents.$.isSet":true,}},(myerr,mydat)=>{
                     console.log("Updating...");
-                    
+
                 })
             }
             });
@@ -620,10 +615,28 @@ app.post("/mainScr/teacher/setQuiz/setQuestions",(req,res)=>{
         }
         else{
             console.log("Done");
-            
+
         }
     })
-    
+
     res.send("Done");
+})
+app.post("/mainScr/teacher/setQuiz/getQuestions",(req,res)=>{
+  // const QuestionSchema = new mongoose.Schema({
+  //     email:String,
+  //     courseQuiz:String,
+  //     courseQuestions:[{ques:String,option1:String,option2:String,option3:String,option4:String}],
+  //     courseAnswers:[{ans:String}]
+  // })
+  let questionData = [];
+  QuizQuestions.findOne({courseQuiz:req.body.course},(err,data)=>{
+    const dl = data[0].length;
+    for(let i=1;i<dl;i++){
+      let dat1 = {
+        
+      }
+    }
+  })
+  res.send("Data received")
 })
 server.listen(process.env.port||4000);
